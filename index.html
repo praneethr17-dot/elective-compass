@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elective Compass · PlanCheck reviews your elective plan before you bid</title>
+<meta name="description" content="Elective Compass is an independent student tool. Its core feature, PlanCheck, reviews your elective plan before you bid. It doesn't predict bid outcomes or seats.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F4F1; --surface:#FFFFFF; --ink:#17202A; --muted:#58636E;
+    --accent:#0D6B5B; --accent-soft:#DAEEE8; --warn-soft:#F6EBD6;
+    --warn-ink:#6E4B0E; --on-accent:#FFFFFF; --line:#DCE2DD;
+    --track:#E6EAE6; --shadow:0 1px 2px rgba(23,32,42,.05),0 8px 24px rgba(23,32,42,.06);
+    --radius:10px; --wrap:1120px;
+    --sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0F1417; --surface:#172026; --ink:#E3E9ED; --muted:#9EAAB4;
+      --accent:#3FB59E; --accent-soft:#15352F; --warn-soft:#3B3121;
+      --warn-ink:#F0CF91; --on-accent:#0F1417; --line:#26323A;
+      --track:#22303A; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55}
+  h1,h2,h3{line-height:1.15;margin:0;letter-spacing:-.015em}
+  p{margin:0}
+  a{color:var(--accent)}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+  .skip{position:absolute;left:-999px;top:8px;background:var(--surface);color:var(--ink);padding:8px 12px;border-radius:8px;z-index:10}
+  .skip:focus{left:8px}
+
+  /* Header */
+  .site-head{padding:18px 0}
+  .site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:700;font-size:18px}
+  .brand svg{flex:none}
+  .brand small{display:block;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.01em}
+  .head-cta{font-size:15px;font-weight:600;text-decoration:none;color:var(--accent);padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+  .head-cta:hover{border-color:var(--accent)}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:17px;padding:14px 22px;border-radius:var(--radius);min-height:48px;transition:transform .15s ease,filter .15s ease}
+  .btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .btn svg{flex:none}
+
+  /* Hero */
+  .hero{padding:28px 0 64px}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:5px 10px;border-radius:999px;margin-bottom:18px}
+  .hero h1{font-size:clamp(1.85rem,4.2vw,3.1rem);font-weight:800}
+  .hero h1 .hl{color:var(--accent)}
+  .hero .sub{color:var(--muted);font-size:clamp(1rem,1.6vw,1.15rem);margin:18px 0 28px;max-width:36em}
+  .hero .sub strong{color:var(--ink);font-weight:600}
+
+  /* Product shot */
+  .mock{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+  .mock-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+  .mock-title{font-weight:700;font-size:15px}
+  .tag-example{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--warn-ink);background:var(--warn-soft);padding:3px 8px;border-radius:6px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}
+  .stat{background:var(--bg);border-radius:8px;padding:10px 12px;min-width:0}
+  .stat dt{font-size:12px;color:var(--muted);font-weight:500}
+  .stat dd{margin:2px 0 8px;font-family:var(--mono);font-weight:600;font-size:15px;white-space:nowrap}
+  .stat dd span{color:var(--muted);font-weight:400}
+  .bar{height:6px;background:var(--track);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+  .checks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .checks li{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;line-height:1.4}
+  .badge{flex:none;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;padding:3px 7px;border-radius:5px;margin-top:1px;min-width:48px;text-align:center}
+  .badge.ok{background:var(--accent-soft);color:var(--accent)}
+  .badge.todo{background:var(--warn-soft);color:var(--warn-ink)}
+  .mock figcaption{margin-top:12px;font-size:13px;color:var(--muted)}
+
+  /* Sections */
+  section{padding:64px 0}
+  .sec-head{max-width:640px;margin-bottom:28px}
+  .kicker{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+  .sec-head h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:800}
+  .sec-head p{color:var(--muted);margin-top:10px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+  .card p,.card li{color:var(--muted);font-size:16px}
+  .card ul{margin:0;padding-left:18px}
+  .card li+li{margin-top:4px}
+  .num{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600;margin-bottom:14px;display:block}
+
+  /* How it works */
+  .how{display:grid;grid-template-columns:.8fr 2fr;gap:16px;align-items:stretch}
+  .inputs{background:var(--accent-soft);border-color:transparent}
+  .inputs h3{color:var(--ink)}
+  .inputs ul{list-style:none;padding:0}
+  .inputs li{color:var(--ink);padding:8px 0;border-top:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+  .inputs li:first-child{border-top:0}
+  .inputs li em{font-style:normal;color:var(--muted);font-size:14px}
+  .scan{display:flex;align-items:center;gap:10px;font-weight:600;margin:0 0 12px;color:var(--ink)}
+  .scan .mono{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--accent)}
+  .out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .out-label{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin-bottom:12px}
+  .note{margin-top:16px;display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-weight:500}
+  .note svg{flex:none;margin-top:3px;color:var(--accent)}
+
+  /* Won't do */
+  .wont{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .wont .card{display:flex;gap:14px;align-items:flex-start;background:var(--warn-soft);border-color:transparent}
+  .wont .card p{color:var(--ink)}
+  .wont .card .x{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--warn-ink)}
+  .wont .card h3{color:var(--ink)}
+
+  /* Tracks */
+  .chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+  .chips li{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:600;font-size:16px}
+
+  /* Demo */
+  .demo-box{background:var(--surface);border:1px dashed var(--accent);border-radius:var(--radius);padding:40px 24px;text-align:center}
+  .demo-box h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800}
+  .demo-box p{color:var(--muted);margin-top:10px}
+  .pulse{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);margin-bottom:14px}
+  .pulse::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);animation:p 1.8s ease-in-out infinite}
+  @keyframes p{50%{opacity:.3}}
+  @media (prefers-reduced-motion: reduce){.pulse::before{animation:none}}
+  #demo:focus{outline:none}
+
+  /* Footer */
+  footer{padding:32px 0 48px;border-top:1px solid var(--line);margin-top:16px}
+  footer .wrap{display:flex;gap:14px;align-items:flex-start}
+  footer p{color:var(--muted);font-size:14px;max-width:60em}
+
+  /* Responsive */
+  @media (max-width:900px){
+    .hero .wrap{grid-template-columns:1fr;gap:36px}
+    .how{grid-template-columns:1fr}
+  }
+  @media (max-width:760px){
+    .grid3,.out-grid,.wont{grid-template-columns:1fr}
+    section{padding:48px 0}
+  }
+  @media (max-width:420px){
+    body{font-size:16px}
+    .wrap{padding:0 16px}
+    .brand small{display:none}
+    .head-cta{padding:7px 10px;font-size:14px}
+    .btn{width:100%;justify-content:center}
+    .mock{padding:14px}
+    .stats{gap:6px}
+    .stat{padding:8px}
+    .stat dd{font-size:13px}
+    .stat dt{font-size:11px}
+    .checks li{font-size:14px;padding:9px 10px;gap:8px}
+    .chips li{padding:8px 14px;font-size:15px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Elective Compass, home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+        <circle cx="17" cy="17" r="15" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M17 6 21 17H13Z" fill="var(--accent)"/>
+        <path d="M17 28 13 17h8Z" fill="currentColor" opacity=".35"/>
+        <circle cx="17" cy="17" r="2" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <span>Elective Compass<small>Independent student tool</small></span>
+    </a>
+    <a class="head-cta" href="#demo" data-focus>Try the demo</a>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" id="top" aria-labelledby="hero-h">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">For ISB PGP Term 5 elective bidding</span>
+        <h1 id="hero-h">Term 5 electives start <span class="hl">19&nbsp;Oct.</span> The bids you place now shape what's still possible in later terms.</h1>
+        <p class="sub"><strong>Elective Compass is an independent student tool.</strong> Its core feature, PlanCheck, reviews your elective plan before you bid. It doesn't predict bid outcomes or seats.</p>
+        <a class="btn" href="#demo" data-focus>
+          Try the PlanCheck demo
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <figure class="mock" aria-labelledby="mock-cap">
+        <div class="mock-head">
+          <span class="mock-title">PlanCheck result</span>
+          <span class="tag-example">Example</span>
+        </div>
+        <dl class="stats">
+          <div class="stat">
+            <dt>Bid points</dt>
+            <dd>1,550 <span>/ 4,500</span></dd>
+            <div class="bar" aria-hidden="true"><i style="width:34%"></i></div>
+          </div>
+          <div class="stat">
+            <dt>Credits</dt>
+            <dd>10 <span>/ 33–36</span></dd>
+            <div class="bar" aria-hidden="true"><i style="width:30%"></i></div>
+          </div>
+          <div class="stat">
+            <dt>Electives</dt>
+            <dd>6 <span>/ 18</span></dd>
+            <div class="bar" aria-hidden="true"><i style="width:33%"></i></div>
+          </div>
+        </dl>
+        <ul class="checks">
+          <li><span class="badge ok">OK</span><span><span class="mono">2,950</span> points left, about <span class="mono">245</span> per remaining course</span></li>
+          <li><span class="badge todo">TO DO</span><span>Term 5: <span class="mono">0</span> electives, at least <span class="mono">3</span> needed</span></li>
+          <li><span class="badge todo">TO DO</span><span><span class="mono">10</span> credits, <span class="mono">23</span> short of the <span class="mono">33</span> minimum</span></li>
+        </ul>
+        <figcaption id="mock-cap">Example output, shown for illustration.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section aria-labelledby="prob-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">The problem</p>
+        <h2 id="prob-h">Plan gaps tend to surface after the bids are in.</h2>
+      </div>
+      <div class="grid3">
+        <article class="card">
+          <span class="num">01</span>
+          <h3>Uneven track coverage is spotted late</h3>
+          <p>For example, Term 5 has no designated core course for Public Policy or GCC Leadership.</p>
+        </article>
+        <article class="card">
+          <span class="num">02</span>
+          <h3>Sequencing rules are easy to miss</h3>
+          <ul>
+            <li>A course split across Terms 5 and 7</li>
+            <li>A course mandatory for a concentration</li>
+            <li>Two versions of the same modelling course</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="num">03</span>
+          <h3>What drives choices lives outside the outlines</h3>
+          <p>Bid history, workload and faculty style aren't in the course outlines.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">How PlanCheck works</p>
+        <h2 id="how-h">Enter your plan. Get three checks back.</h2>
+      </div>
+      <div class="how">
+        <div class="card inputs">
+          <h3>You enter</h3>
+          <ul>
+            <li>Career track <em>(plus an optional one-line goal)</em></li>
+            <li>Completed electives</li>
+            <li>Points spent</li>
+            <li>Proposed Term 5 electives with bids</li>
+          </ul>
+        </div>
+        <div>
+          <p class="scan">PlanCheck scans all <span class="mono">105</span> electives and returns:</p>
+          <div class="out-grid">
+            <article class="card">
+              <span class="out-label">Rules</span>
+              <ul>
+                <li>Can your remaining terms still reach 18 electives and 33–36 credits?</li>
+                <li>Do remaining points cover at least 100 per elective needed?</li>
+                <li>Any sequencing issues?</li>
+              </ul>
+            </article>
+            <article class="card">
+              <span class="out-label">Fit</span>
+              <p>Each course's relevance to your track, quoting its outline. Labelled “based on course outline only”.</p>
+            </article>
+            <article class="card">
+              <span class="out-label">Missed options</span>
+              <p>Relevant electives you didn't list, with coverage warnings.</p>
+            </article>
+          </div>
+          <p class="note">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>
+            Every flag cites the outline behind it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WON'T DO -->
+  <section aria-labelledby="wont-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Limits</p>
+        <h2 id="wont-h">What PlanCheck won't do</h2>
+      </div>
+      <div class="wont">
+        <div class="card">
+          <span class="x" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+          <div><h3>Predict bid outcomes or seats</h3><p>It reviews your plan, not your odds.</p></div>
+        </div>
+        <div class="card">
+          <span class="x" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+          <div><h3>Cover workload or faculty style</h3><p>Seniors remain your best source.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO -->
+  <section aria-labelledby="who-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Who it's for</p>
+        <h2 id="who-h">Built around six career tracks</h2>
+      </div>
+      <ul class="chips">
+        <li>Consulting</li><li>PE/VC</li><li>Product</li>
+        <li>Finance</li><li>Public Policy</li><li>GCC Leadership</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section id="demo" tabindex="-1" aria-labelledby="demo-h">
+    <div class="wrap">
+      <div class="demo-box">
+        <span class="pulse">Next release</span>
+        <h2 id="demo-h">PlanCheck demo: launching shortly</h2>
+        <p>The demo goes live in the next release.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <svg width="22" height="22" viewBox="0 0 34 34" aria-hidden="true" style="flex:none;margin-top:1px">
+      <circle cx="17" cy="17" r="15" fill="none" stroke="var(--muted)" stroke-width="2"/>
+      <path d="M17 6 21 17H13Z" fill="var(--accent)"/>
+      <path d="M17 28 13 17h8Z" fill="var(--muted)" opacity=".5"/>
+    </svg>
+    <p>Independent student project. Not affiliated with or endorsed by ISB. Rules as published for 2026–27; always check official outlines before bidding.</p>
+  </div>
+</footer>
+
+<script>
+  // Move keyboard/screen-reader focus to the demo section after the CTA jump.
+  document.querySelectorAll('a[data-focus]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var t = document.getElementById('demo');
+      if (t) setTimeout(function(){ t.focus({preventScroll:true}); }, 0);
+    });
+  });
+</script>
+</body>
+</html>
