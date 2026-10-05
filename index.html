@@ -160,6 +160,58 @@
     .checks li{font-size:14px;padding:9px 10px;gap:8px}
     .chips li{padding:8px 14px;font-size:15px}
   }
+  /* PlanCheck Lite */
+  .pc-stats{font-size:14px;color:var(--muted);margin-top:12px}
+  .pc-form{display:grid;gap:20px}
+  .pc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .pc-field{display:grid;gap:6px;min-width:0}
+  .pc-field label,.pc-courses legend{font-size:14px;font-weight:600}
+  .pc-field label span{font-weight:400;color:var(--muted)}
+  .pc-form input,.pc-form select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px;width:100%;min-width:0}
+  .pc-form input[type=number]{font-family:var(--mono)}
+  .pc-form input:focus-visible,.pc-form select:focus-visible{border-color:var(--accent)}
+  .pc-courses{border:0;margin:0;padding:0;display:grid;gap:12px;min-width:0}
+  .pc-courses legend{padding:0;margin-bottom:12px}
+  #pc-rows{display:grid;gap:12px}
+  .pc-row{display:grid;grid-template-columns:minmax(0,1fr) 130px auto;gap:10px;align-items:end}
+  .pc-row .pc-field label{font-weight:500;font-size:13px;color:var(--muted)}
+  .pc-remove{font:inherit;font-size:14px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;min-height:44px;padding:0 12px;cursor:pointer}
+  .pc-remove:hover{border-color:var(--accent);color:var(--ink)}
+  .pc-add{justify-self:start;font:inherit;font-weight:600;font-size:15px;color:var(--accent);background:var(--surface);border:1px dashed var(--accent);border-radius:8px;min-height:44px;padding:0 14px;cursor:pointer}
+  .pc-add:disabled{opacity:.55;cursor:not-allowed}
+  .pc-hint,.pc-small{font-size:13px;color:var(--muted)}
+  .pc-submit{border:0;cursor:pointer;justify-self:start;font-family:inherit}
+  .pc-submit:disabled{opacity:.7;cursor:progress;transform:none;filter:none}
+  .pc-msg{margin-top:16px;padding:14px 16px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--line);display:flex;gap:10px;align-items:center}
+  .pc-msg.warn,.pc-msg.error{background:var(--warn-soft);border-color:transparent}
+  .pc-spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:pcspin .8s linear infinite;flex:none}
+  @keyframes pcspin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){.pc-spin{animation:none}}
+  .pc-result{margin-top:20px;display:grid;gap:22px}
+  .pc-summary{background:var(--accent-soft);border-radius:var(--radius);padding:18px 20px;font-weight:600}
+  .pc-summary:focus{outline:none}
+  .pc-coverage{background:var(--warn-soft);border-radius:var(--radius);padding:14px 18px}
+  .pc-block h3{font-size:1.1rem;font-weight:700;margin-bottom:10px}
+  .pc-sub{font-size:13px;color:var(--muted);margin:-4px 0 12px}
+  .pc-result .checks li{background:var(--surface)}
+  .pc-detail{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+  .pc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .pc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .pc-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}
+  .pc-card-head .mono{display:block;font-size:12px;color:var(--muted)}
+  .pc-card-head strong{font-size:15px;line-height:1.3}
+  .pc-card p{color:var(--muted);font-size:15px}
+  .pc-empty{color:var(--muted);font-size:15px}
+  .pc-fit{flex:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 7px;border-radius:5px;letter-spacing:.04em;text-transform:uppercase}
+  .pc-fit.core{background:var(--accent-soft);color:var(--accent)}
+  .pc-fit.useful{border:1px solid var(--accent);color:var(--accent)}
+  .pc-fit.low{background:var(--warn-soft);color:var(--warn-ink)}
+  @media (max-width:600px){
+    .pc-grid{grid-template-columns:1fr}
+    .pc-row{grid-template-columns:minmax(0,1fr) 100px}
+    .pc-row .pc-remove{grid-column:1/-1;justify-self:start;min-height:36px}
+    .pc-submit{width:100%;justify-content:center}
+  }
 </style>
 </head>
 <body>
@@ -337,14 +389,53 @@
     </div>
   </section>
 
-  <!-- DEMO -->
+  <!-- DEMO: PlanCheck Lite -->
   <section id="demo" tabindex="-1" aria-labelledby="demo-h">
     <div class="wrap">
-      <div class="demo-box">
-        <span class="pulse">Next release</span>
-        <h2 id="demo-h">PlanCheck demo: launching shortly</h2>
-        <p>The demo goes live in the next release.</p>
+      <div class="sec-head">
+        <p class="kicker">PlanCheck Lite</p>
+        <h2 id="demo-h">Check your Term 5 plan</h2>
+        <p>Rule checks are computed by code. An AI note explains how each course fits your track.</p>
+        <p class="pc-stats mono" id="pc-stats" hidden></p>
       </div>
+
+      <form class="card pc-form" id="pc-form">
+        <div class="pc-grid">
+          <div class="pc-field">
+            <label for="pc-track">Career track</label>
+            <select id="pc-track" required>
+              <option value="">Choose a track</option>
+              <option>Consulting</option><option>PE/VC</option><option>Product</option>
+              <option>Finance</option><option>Public Policy</option><option>GCC Leadership</option>
+            </select>
+          </div>
+          <div class="pc-field">
+            <label for="pc-goal">One-line goal <span>(optional)</span></label>
+            <input id="pc-goal" type="text" maxlength="120" autocomplete="off" placeholder="e.g. Product roles in fintech">
+          </div>
+          <div class="pc-field">
+            <label for="pc-points">Points spent so far</label>
+            <input id="pc-points" type="number" min="0" max="4500" step="1" inputmode="numeric" required placeholder="e.g. 1550">
+          </div>
+          <div class="pc-field">
+            <label for="pc-done">Electives completed so far</label>
+            <input id="pc-done" type="number" min="0" max="18" step="1" inputmode="numeric" required placeholder="e.g. 6">
+          </div>
+        </div>
+
+        <fieldset class="pc-courses">
+          <legend>Planned Term 5 courses and bids</legend>
+          <div id="pc-rows"></div>
+          <button type="button" class="pc-add" id="pc-add">+ Add course</button>
+        </fieldset>
+
+        <p class="pc-hint">Please don't enter your name or other personal details.</p>
+        <button class="btn pc-submit" type="submit" id="pc-submit" disabled>Check my plan</button>
+        <p class="pc-small">Outlines and fit labels are estimates, not ISB's official outlines. PlanCheck never predicts bid outcomes or seats.</p>
+      </form>
+
+      <div class="pc-msg" id="pc-msg" role="status" aria-live="polite" hidden></div>
+      <div class="pc-result" id="pc-result" aria-live="polite" hidden></div>
     </div>
   </section>
 </main>
@@ -368,6 +459,229 @@
       if (t) setTimeout(function(){ t.focus({preventScroll:true}); }, 0);
     });
   });
+</script>
+<script>
+/* PlanCheck Lite. Talks only to /api/plancheck. No keys and no database client in the browser. */
+(function () {
+  'use strict';
+  const API = '/api/plancheck';
+  const MAX_ROWS = 5, DEFAULT_ROWS = 3, ID_KEY = 'ec_visitor_id';
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const $ = (id) => document.getElementById(id);
+  const form = $('pc-form'), rowsEl = $('pc-rows'), addBtn = $('pc-add'), submitBtn = $('pc-submit');
+  const msg = $('pc-msg'), out = $('pc-result'), statsEl = $('pc-stats');
+  if (!form) return;
+  let courses = [];
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function newId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+    const h = Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
+    return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+  }
+
+  let visitorId = null;
+  try {
+    const saved = localStorage.getItem(ID_KEY);
+    if (saved && UUID_RE.test(saved)) visitorId = saved;
+    else { visitorId = newId(); localStorage.setItem(ID_KEY, visitorId); }
+  } catch (_) { visitorId = visitorId || newId(); }
+
+  // ----- course rows -----
+  function renumber() {
+    const rows = Array.from(rowsEl.children);
+    rows.forEach((r, i) => {
+      const labels = r.querySelectorAll('label');
+      labels[0].textContent = `Course ${i + 1}`;
+      labels[1].textContent = 'Bid points';
+      const rm = r.querySelector('.pc-remove');
+      rm.setAttribute('aria-label', `Remove course ${i + 1}`);
+      rm.hidden = rows.length === 1;
+    });
+    addBtn.disabled = rows.length >= MAX_ROWS;
+    addBtn.textContent = rows.length >= MAX_ROWS ? 'Maximum 5 courses' : '+ Add course';
+  }
+
+  function makeRow() {
+    if (rowsEl.children.length >= MAX_ROWS) return null;
+    const uid = 'pc' + Math.random().toString(36).slice(2, 9);
+    const row = el('div', 'pc-row');
+
+    const f1 = el('div', 'pc-field');
+    const l1 = el('label'); l1.htmlFor = uid + 'c';
+    const sel = el('select', 'pc-code'); sel.id = uid + 'c'; sel.required = true;
+    sel.append(new Option('Choose a course', ''));
+    courses.forEach((c) => sel.append(new Option(`${c.code}: ${c.name}`, c.code)));
+    f1.append(l1, sel);
+
+    const f2 = el('div', 'pc-field');
+    const l2 = el('label'); l2.htmlFor = uid + 'b';
+    const bid = el('input', 'pc-bid');
+    Object.assign(bid, { id: uid + 'b', type: 'number', min: '100', max: '4500', step: '1', required: true, inputMode: 'numeric', placeholder: '100+' });
+    f2.append(l2, bid);
+
+    const rm = el('button', 'pc-remove', 'Remove'); rm.type = 'button';
+    rm.addEventListener('click', () => { row.remove(); renumber(); addBtn.focus(); });
+
+    row.append(f1, f2, rm);
+    rowsEl.append(row);
+    renumber();
+    return row;
+  }
+
+  addBtn.addEventListener('click', () => { const r = makeRow(); if (r) r.querySelector('select').focus(); });
+
+  // ----- messages, stats, loading -----
+  function showMsg(text, kind, loading) {
+    msg.replaceChildren();
+    msg.className = 'pc-msg' + (kind ? ' ' + kind : '');
+    if (loading) { const s = el('span', 'pc-spin'); s.setAttribute('aria-hidden', 'true'); msg.append(s); }
+    msg.append(el('span', null, text));
+    msg.hidden = false;
+  }
+  function hideMsg() { msg.hidden = true; msg.replaceChildren(); }
+
+  function renderStats(s) {
+    if (!s || typeof s.plans_checked !== 'number') return;
+    const n = s.plans_checked;
+    statsEl.textContent = `${n.toLocaleString('en-IN')} plan${n === 1 ? '' : 's'} checked · Most-checked track this week: ${s.top_track_week || 'none yet'}`;
+    statsEl.hidden = false;
+  }
+
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    submitBtn.textContent = on ? 'Checking…' : 'Check my plan';
+    out.setAttribute('aria-busy', on ? 'true' : 'false');
+    if (on) showMsg('Checking your plan. This can take a few seconds.', null, true);
+  }
+
+  // ----- results -----
+  function courseCards(items, emptyText) {
+    if (!Array.isArray(items) || !items.length) return el('p', 'pc-empty', emptyText);
+    const grid = el('div', 'pc-cards');
+    items.forEach((it) => {
+      const card = el('article', 'pc-card');
+      const head = el('div', 'pc-card-head');
+      const title = el('div');
+      title.append(el('span', 'mono', it.code), el('strong', null, it.name || ''));
+      const lab = ['core', 'useful', 'low'].includes(it.track_fit) ? it.track_fit : '';
+      head.append(title);
+      if (lab) head.append(el('span', 'pc-fit ' + lab, lab[0].toUpperCase() + lab.slice(1)));
+      card.append(head, el('p', null, it.note || ''));
+      grid.append(card);
+    });
+    return grid;
+  }
+
+  function render(d, track) {
+    out.replaceChildren();
+
+    const sum = el('div', 'pc-summary');
+    sum.tabIndex = -1;
+    sum.append(el('p', null, d.summary || ''));
+    out.append(sum);
+
+    if (d.coverage_note) {
+      const cov = el('div', 'pc-coverage');
+      cov.append(el('p', null, d.coverage_note));
+      out.append(cov);
+    }
+
+    const rb = el('div', 'pc-block');
+    rb.append(el('h3', null, 'Rules'));
+    const ul = el('ul', 'checks');
+    (d.rules || []).forEach((r) => {
+      const ok = r.status === 'OK';
+      const li = el('li');
+      li.append(el('span', 'badge ' + (ok ? 'ok' : 'todo'), ok ? 'OK' : 'FAIL'));
+      const t = el('span');
+      t.append(el('strong', null, r.rule), el('span', 'pc-detail', r.detail));
+      li.append(t);
+      ul.append(li);
+    });
+    rb.append(ul);
+    out.append(rb);
+
+    const fb = el('div', 'pc-block');
+    fb.append(el('h3', null, `Fit for ${track}`), el('p', 'pc-sub', 'Based on course outline only.'));
+    fb.append(courseCards(d.fit, 'No AI fit notes for this check.'));
+    out.append(fb);
+
+    const mb = el('div', 'pc-block');
+    mb.append(el('h3', null, 'Missed options'));
+    mb.append(courseCards(d.missed_options, 'No missed options suggested.'));
+    out.append(mb);
+
+    out.hidden = false;
+    sum.focus({ preventScroll: true });
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    out.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  // ----- submit -----
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const planned = Array.from(rowsEl.children).map((r) => ({
+      code: r.querySelector('.pc-code').value,
+      bid: Number(r.querySelector('.pc-bid').value),
+    }));
+    const codes = planned.map((p) => p.code);
+    if (new Set(codes).size !== codes.length) {
+      showMsg('Each course can only appear once. Change or remove the duplicate and try again.', 'warn');
+      return;
+    }
+    const track = $('pc-track').value;
+    const payload = {
+      visitor_id: visitorId,
+      track,
+      goal: $('pc-goal').value.trim(),
+      points_spent: Number($('pc-points').value),
+      electives_completed: Number($('pc-done').value),
+      planned,
+    };
+
+    setLoading(true);
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      let data = {};
+      try { data = await r.json(); } catch (_) {}
+      if (r.status === 429) {
+        out.hidden = true;
+        showMsg(data.error || "You've used your 3 free checks for today. Please come back tomorrow.", 'warn');
+        return;
+      }
+      if (!r.ok) { showMsg(data.error || 'Something went wrong. Please try again.', 'error'); return; }
+      hideMsg();
+      render(data, track);
+      if (data.stats) renderStats(data.stats);
+    } catch (_) {
+      showMsg('Network error. Check your connection and try again.', 'error');
+    } finally {
+      setLoading(false);
+      if (!msg.hidden && msg.querySelector('.pc-spin')) hideMsg();
+    }
+  });
+
+  // ----- init -----
+  fetch('/term5.json')
+    .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+    .then((list) => {
+      courses = list.map((c) => ({ code: c.code, name: c.name }));
+      for (let i = 0; i < DEFAULT_ROWS; i++) makeRow();
+      submitBtn.disabled = false;
+    })
+    .catch(() => showMsg("Couldn't load the course list. Please refresh the page.", 'error'));
+
+  fetch(API).then((r) => (r.ok ? r.json() : null)).then((d) => d && renderStats(d.stats)).catch(() => {});
+})();
 </script>
 </body>
 </html>

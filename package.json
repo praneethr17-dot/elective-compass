@@ -1,0 +1,9 @@
+{
+  "name": "elective-compass",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.50.0"
+  }
+}

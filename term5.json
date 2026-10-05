@@ -1,0 +1,243 @@
+[
+ {
+  "code": "ABTE",
+  "name": "A/B Testing and Tech Product Experimentation",
+  "credits": 2,
+  "outline": "Designing and reading online experiments: hypotheses, metric choice, power and sample size, common pitfalls, network effects and when to use causal inference instead of A/B tests.",
+  "topics": "Experiment design; power; guardrail metrics; pitfalls; network effects; causal inference",
+  "grading": "individual-heavy",
+  "track_fit": {
+   "Consulting": "low",
+   "PE/VC": "low",
+   "Product": "core",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "useful"
+  }
+ },
+ {
+  "code": "BVFS",
+  "name": "Business Valuation Using Financial Statements",
+  "credits": 2,
+  "outline": "Valuation from financial statements: analysing and forecasting statements, DCF, residual income, multiples and judging earnings quality.",
+  "topics": "Financial statement analysis; forecasting; DCF; residual income; multiples; earnings quality",
+  "grading": "individual-heavy",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "core",
+   "Product": "low",
+   "Finance": "core",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "CDMA2",
+  "name": "Corporate Development: Mergers & Acquisitions",
+  "credits": 2,
+  "outline": "Strategy view of M&A as a growth tool: building a deal thesis, screening targets, synergy logic, integration planning and why deals fail.",
+  "topics": "Deal thesis; target screening; synergies; PMI; deal failure",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "core",
+   "PE/VC": "core",
+   "Product": "low",
+   "Finance": "useful",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "COBE",
+  "name": "Consumer Behaviour",
+  "credits": 2,
+  "outline": "The psychology behind consumer choice: perception, motivation, memory, attitudes, behavioural economics and designing nudges.",
+  "topics": "Decision psychology; perception; motivation; behavioural economics; nudges",
+  "grading": "balanced",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "low",
+   "Product": "core",
+   "Finance": "low",
+   "Public Policy": "useful",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "DTME1",
+  "name": "Digital Transformation & Innovation in the Manufacturing Ecosystem, Part 1",
+  "credits": 1,
+  "outline": "Part 1 of a two-part course (continues as DTME2 in Term 7). Industry 4.0 foundations: IoT, digital twins, automation and data-driven manufacturing.",
+  "topics": "Industry 4.0; IoT; digital twins; smart factory; transformation roadmaps",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "low",
+   "Product": "low",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "useful"
+  },
+  "sequencing": "Part 1 of 2; continues as DTME2 in Term 7; mandatory for the Manufacturing specialisation"
+ },
+ {
+  "code": "ENVC",
+  "name": "Entrepreneurship and Venture Capital",
+  "credits": 2,
+  "outline": "The founder-investor relationship: stages of venture financing, how VCs evaluate deals, startup valuation, term sheets, cap tables and governance.",
+  "topics": "VC stages; deal evaluation; startup valuation; term sheets; cap tables; board dynamics",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "low",
+   "PE/VC": "core",
+   "Product": "useful",
+   "Finance": "useful",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "LWPM",
+  "name": "Leading with Purpose and Meaning",
+  "credits": 2,
+  "outline": "Reflective course on purpose-driven leadership: personal values, meaning at work and building purposeful organizations.",
+  "topics": "Purpose; values; meaningful work; purposeful organizations",
+  "grading": "individual-heavy",
+  "track_fit": {
+   "Consulting": "low",
+   "PE/VC": "low",
+   "Product": "low",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "useful"
+  }
+ },
+ {
+  "code": "MKTS",
+  "name": "Marketing Strategy",
+  "credits": 2,
+  "outline": "Competitive marketing strategy: choosing markets, building sustainable advantage, positioning, growth strategies and measuring marketing ROI.",
+  "topics": "Market selection; competitive advantage; positioning; growth; marketing ROI",
+  "grading": "balanced",
+  "track_fit": {
+   "Consulting": "core",
+   "PE/VC": "low",
+   "Product": "useful",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "MSTC",
+  "name": "The Modern Strategy Consultant",
+  "credits": 2,
+  "outline": "Consulting toolkit: problem structuring, hypothesis-driven work, issue trees, fast analytics, storyline and slide craft, client management and how AI is changing consulting.",
+  "topics": "Problem structuring; issue trees; hypothesis-driven work; storylining; client management; AI in consulting",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "core",
+   "PE/VC": "useful",
+   "Product": "low",
+   "Finance": "low",
+   "Public Policy": "useful",
+   "GCC Leadership": "useful"
+  }
+ },
+ {
+  "code": "MTCC",
+  "name": "Monetizing Tech: From Code to Cashflow",
+  "credits": 2,
+  "outline": "How digital products make money: platform economics, network effects, freemium, subscription and usage pricing, and SaaS metrics.",
+  "topics": "Platform economics; network effects; freemium; SaaS metrics; digital pricing",
+  "grading": "balanced",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "useful",
+   "Product": "core",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "NEGA1",
+  "name": "Negotiation Analysis",
+  "credits": 2,
+  "outline": "Role-play-based negotiation course: distributive and integrative bargaining, BATNA, multi-party and multi-issue deals, and negotiating across cultures.",
+  "topics": "BATNA; distributive vs integrative; multi-party; cross-cultural; ethics",
+  "grading": "individual-heavy",
+  "track_fit": {
+   "Consulting": "core",
+   "PE/VC": "core",
+   "Product": "useful",
+   "Finance": "useful",
+   "Public Policy": "useful",
+   "GCC Leadership": "useful"
+  }
+ },
+ {
+  "code": "NSDL",
+  "name": "New Product and Service Development and Launch",
+  "credits": 2,
+  "outline": "Taking a new offering from idea to launch: idea generation, concept testing, conjoint, forecasting adoption, launch planning and managing the pipeline.",
+  "topics": "Stage-gate; concept testing; conjoint; adoption forecasting; launch planning",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "low",
+   "Product": "core",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "PEVF",
+  "name": "Private Equity and Venture Capital Financing",
+  "credits": 2,
+  "outline": "The investor side of private markets: fund structure and LP/GP economics, sourcing, the VC method, LBO modelling, value creation, exits and India's PE/VC landscape.",
+  "topics": "Fund economics; VC method; LBO; value creation; exits; India PE landscape",
+  "grading": "balanced",
+  "track_fit": {
+   "Consulting": "useful",
+   "PE/VC": "core",
+   "Product": "low",
+   "Finance": "core",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "RTLG",
+  "name": "Retailing",
+  "credits": 2,
+  "outline": "Retail strategy and operations: formats, merchandising and assortment, pricing and promotions, omnichannel and quick commerce.",
+  "topics": "Retail formats; merchandising; assortment; omnichannel; q-commerce",
+  "grading": "team-heavy",
+  "track_fit": {
+   "Consulting": "core",
+   "PE/VC": "useful",
+   "Product": "low",
+   "Finance": "low",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ },
+ {
+  "code": "STAR",
+  "name": "Strategic Trading and Research",
+  "credits": 2,
+  "outline": "Equity research and trading in practice: building research theses, trading strategies, market microstructure and portfolio construction.",
+  "topics": "Equity research; trading strategies; microstructure; portfolio construction",
+  "grading": "individual-heavy",
+  "track_fit": {
+   "Consulting": "low",
+   "PE/VC": "useful",
+   "Product": "low",
+   "Finance": "core",
+   "Public Policy": "low",
+   "GCC Leadership": "low"
+  }
+ }
+]

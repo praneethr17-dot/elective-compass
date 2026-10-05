@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/plancheck.js": {
+      "includeFiles": "{term5.json,plancheck_system_prompt.txt}",
+      "maxDuration": 20
+    }
+  }
+}
