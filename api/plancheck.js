@@ -185,10 +185,14 @@ async function callGemini(student, rules, candidates) {
       }),
       signal: ctrl.signal,
     });
-    if (!r.ok) throw new Error(`gemini_http_${r.status}`);
+    if (!r.ok) {
+      let reason = '';
+      try { const j = await r.json(); reason = j?.error?.status || j?.error?.message || ''; } catch {}
+      throw new Error(`gemini_http_${r.status} ${String(reason).slice(0, 200)}`);
+    }
     const data = await r.json();
     const text = (data?.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('');
-    return { text, usage: data?.usageMetadata || {} };
+    return { text, usage: data?.usageMetadata || {}, finish: data?.candidates?.[0]?.finishReason };
   } finally {
     clearTimeout(timer);
   }
@@ -241,7 +245,11 @@ async function getStats() {
     sb.from('plan_checks').select('id', { count: 'exact', head: true }),
     sb.from('plan_checks').select('track').gte('created_at', since7d),
   ]);
-  if (total.error || week.error) throw new Error('stats_failed');
+  if (total.error || week.error) {
+    const e = total.error || week.error;
+    console.error('plancheck: supabase stats error:', e.code || '', e.message || '', e.hint || '');
+    throw new Error('stats_failed');
+  }
   const tally = {};
   for (const row of week.data || []) if (row.track) tally[row.track] = (tally[row.track] || 0) + 1;
   let top = null;
@@ -280,7 +288,10 @@ export default async function handler(req, res) {
       .select('id', { count: 'exact', head: true })
       .eq('visitor_id', input.visitor_id)
       .gte('created_at', since24h);
-    if (capError) throw new Error('cap_check_failed');
+    if (capError) {
+      console.error('plancheck: supabase cap error:', capError.code || '', capError.message || '', capError.hint || '');
+      throw new Error('cap_check_failed');
+    }
     if ((count ?? 0) >= DAILY_CAP) return res.status(429).json({ error: CAP_MSG });
 
     const { rules, valid } = runRules(input);
@@ -296,7 +307,7 @@ export default async function handler(req, res) {
         const g = await callGemini({ track: input.track, goal: input.goal, planned: validCodes }, rules, candidates);
         usage = g.usage;
         ai = sanitize(g.text, validCodes, candidates, input.track);
-        if (!ai) console.error('plancheck: model returned invalid JSON');
+        if (!ai) console.error('plancheck: model returned invalid JSON, finishReason:', g.finish || '', 'chars:', (g.text || '').length);
       } catch (err) {
         console.error('plancheck: gemini call failed:', err?.name === 'AbortError' ? 'timeout' : err?.message);
       }
@@ -331,7 +342,7 @@ export default async function handler(req, res) {
       output_tokens: usage.candidatesTokenCount ?? null,
       model: modelUsed,
     });
-    if (insertError) console.error('plancheck: log insert failed');
+    if (insertError) console.error('plancheck: log insert failed:', insertError.code || '', insertError.message || '');
 
     let stats = null;
     try { stats = await getStats(); } catch { /* stats are optional on POST */ }
