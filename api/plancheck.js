@@ -301,15 +301,20 @@ export default async function handler(req, res) {
     let ai = null;
     let usage = {};
     let modelUsed = null;
+    let aiError = null;
     if (validCodes.length > 0) {
       modelUsed = MODEL;
       try {
         const g = await callGemini({ track: input.track, goal: input.goal, planned: validCodes }, rules, candidates);
         usage = g.usage;
         ai = sanitize(g.text, validCodes, candidates, input.track);
-        if (!ai) console.error('plancheck: model returned invalid JSON, finishReason:', g.finish || '', 'chars:', (g.text || '').length);
+        if (!ai) {
+          aiError = `invalid_json finish=${g.finish || ''} chars=${(g.text || '').length}`;
+          console.error('plancheck: model returned invalid JSON, finishReason:', g.finish || '', 'chars:', (g.text || '').length);
+        }
       } catch (err) {
-        console.error('plancheck: gemini call failed:', err?.name === 'AbortError' ? 'timeout' : err?.message);
+        aiError = err?.name === 'AbortError' ? 'timeout' : String(err?.message || 'unknown').slice(0, 300);
+        console.error('plancheck: gemini call failed:', aiError);
       }
     }
 
@@ -337,7 +342,7 @@ export default async function handler(req, res) {
         planned: input.planned,
       },
       rule_flags: rules,
-      output,
+      output: aiError ? { ...output, ai_error: aiError } : output,
       input_tokens: usage.promptTokenCount ?? null,
       output_tokens: usage.candidatesTokenCount ?? null,
       model: modelUsed,
