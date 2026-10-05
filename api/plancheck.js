@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const TRACKS = ['Consulting', 'PE/VC', 'Product', 'Finance', 'Public Policy', 'GCC Leadership'];
 // Model: GEMINI_MODEL env var if set, else the first of these that exists for the key (404 = try next).
-const MODELS = [...new Set([process.env.GEMINI_MODEL, 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash-lite'].filter(Boolean))];
+const MODELS = [...new Set([process.env.GEMINI_MODEL, 'gemini-3.5-flash-lite', 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash-lite'].filter(Boolean))];
 const geminiUrl = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`;
 const TOTAL_POINTS = 4500;
 const MIN_BID = 100;
