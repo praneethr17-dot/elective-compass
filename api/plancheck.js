@@ -5,8 +5,9 @@ import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 
 const TRACKS = ['Consulting', 'PE/VC', 'Product', 'Finance', 'Public Policy', 'GCC Leadership'];
-const MODEL = 'gemini-2.5-flash-lite';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+// Model: GEMINI_MODEL env var if set, else the first of these that exists for the key (404 = try next).
+const MODELS = [...new Set([process.env.GEMINI_MODEL, 'gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash-lite'].filter(Boolean))];
+const geminiUrl = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`;
 const TOTAL_POINTS = 4500;
 const MIN_BID = 100;
 const TOTAL_ELECTIVES = 18;
@@ -170,7 +171,11 @@ async function callGemini(student, rules, candidates) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 15000);
   try {
-    const r = await fetch(GEMINI_URL, {
+    let r = null;
+    let model = null;
+    for (const m of MODELS) {
+    model = m;
+    r = await fetch(geminiUrl(m), {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
@@ -185,14 +190,16 @@ async function callGemini(student, rules, candidates) {
       }),
       signal: ctrl.signal,
     });
+    if (r.status !== 404) break;
+    }
     if (!r.ok) {
       let reason = '';
       try { const j = await r.json(); reason = j?.error?.status || j?.error?.message || ''; } catch {}
-      throw new Error(`gemini_http_${r.status} ${String(reason).slice(0, 200)}`);
+      throw new Error(`gemini_http_${r.status} ${String(reason).slice(0, 200)} (tried ${MODELS.join(', ')})`);
     }
     const data = await r.json();
     const text = (data?.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('');
-    return { text, usage: data?.usageMetadata || {}, finish: data?.candidates?.[0]?.finishReason };
+    return { text, usage: data?.usageMetadata || {}, finish: data?.candidates?.[0]?.finishReason, model };
   } finally {
     clearTimeout(timer);
   }
@@ -303,10 +310,10 @@ export default async function handler(req, res) {
     let modelUsed = null;
     let aiError = null;
     if (validCodes.length > 0) {
-      modelUsed = MODEL;
       try {
         const g = await callGemini({ track: input.track, goal: input.goal, planned: validCodes }, rules, candidates);
         usage = g.usage;
+        modelUsed = g.model;
         ai = sanitize(g.text, validCodes, candidates, input.track);
         if (!ai) {
           aiError = `invalid_json finish=${g.finish || ''} chars=${(g.text || '').length}`;
